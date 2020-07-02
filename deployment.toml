@@ -1,0 +1,100 @@
+[server]
+hostname = "localhost"
+node_ip = "127.0.0.1"
+base_path = "https://$ref{server.hostname}:${carbon.management.port}"
+
+[sts.endpoint] 
+idp="https://localhost:9443/samlsso"
+
+[super_admin]
+username = "admin"
+password = "admin"
+create_admin_account = true
+
+[user_store]
+type = "read_write_ldap_unique_id"
+connection_url = "ldap://localhost:${Ports.EmbeddedLDAP.LDAPServerPort}"
+connection_name = "uid=admin,ou=system"
+connection_password = "admin"
+base_dn = "dc=wso2,dc=org"      #refers the base dn on which the user and group search bases will be generated
+
+[database.identity_db]
+type = "mysql"
+url = "jdbc:mysql://localhost:3306/identity_db?autoReconnect=true&amp;useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"
+username = "root"
+password = "root"
+driver = "com.mysql.jdbc.Driver"
+
+[database.shared_db]
+type = "mysql"
+url = "jdbc:mysql://localhost:3306/shared_db?autoReconnect=true&amp;useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"
+username = "root"
+password = "root"
+driver = "com.mysql.jdbc.Driver"
+
+[keystore.primary]
+file_name = "wso2carbon.jks"
+password = "wso2carbon"
+
+[identity_mgt.user_onboarding]
+enable_email_verification = true
+lock_on_creation= true
+
+[output_adapter.email]
+from_address= "harshitha.chandrashekar24@gmail.com"
+username= "harshitha.chandrashekar24@gmail.com"
+password= "Chandra1@"
+hostname= "smtp.gmail.com"
+port= 587
+enable_start_tls= true
+enable_authentication= true
+
+[event.default_listener.identity_mgt]
+priority= "50"
+enable = false
+[event.default_listener.governance_identity_mgt]
+priority= "95"
+enable = true
+[event.default_listener.governance_identity_store]
+priority= "97"
+enable = true
+
+[oauth.grant_type.uma_ticket]
+retrieve_uma_permission_info_through_introspection=true
+
+[identity_mgt.password_reset_email] 
+enable_recaptcha= true
+
+# Google reCAPTCHA settings
+
+# Enable Google reCAPTCHA
+[recaptcha] 
+enabled= true
+
+# reCaptcha API URL
+api_url="https://www.google.com/recaptcha/api.js"
+
+# reCaptcha verification URL
+verify_url="https://www.google.com/recaptcha/api/siteverify"
+
+# reCaptcha site key
+site_key="6Ld716gZAAAAAIf1PSJU9g6oMeEu0zMYN73KtwTz"
+
+# reCaptcha secret key
+secret_key="6Ld716gZAAAAABdpS-HEkNTGixkwif8WM6M8gYq7"
+
+[admin_service.wsdl] 
+enable= true
+
+[user_store.properties]
+is_bulk_import_supported  =  true
+username_java_regex = "^[\\S]{3,30}$"
+
+[event.default_listener.user_deletion]
+priority= "98"
+enable = true 
+
+[event.default_recorder.user_delete_event]
+name= "org.wso2.carbon.user.mgt.recorder.DefaultUserDeletionEventRecorder"
+enable = false
+write_to_separate_csv.path = "${carbon.home}/repository/logs/delete-records.csv"
